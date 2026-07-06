@@ -12,9 +12,8 @@
     
 @Description: [code description - what does this accomplish?]
 """
-<<<<<<< Updated upstream
-=======
 # 7-5-26 GB. Added global variables for putting data into
+
 import census
 import us
 
@@ -27,7 +26,7 @@ print(c.acs5.state_county(('NAME','B25034_010E'),states.AK.fips, '170'))
 
 
 
->>>>>>> Stashed changes
+
 ########################### 
 # GLOBAL VARIABLES
 ###########################
