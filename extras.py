@@ -18,7 +18,7 @@ def goAgain():  # adds loop to ask user if they want to repeat program
     global Again  # variable for setting program loop
     replayAsk = True
     while replayAsk == True:
-        Again = input('\nThat was fun! Want to play again? y/n: ')
+        Again = input('\nDo you want to repeat your previous actions? y/n ')
         Again = str.lower(Again) # for accuracy
         Again = str.strip(Again) # for accuracy
         if Again == 'y':
