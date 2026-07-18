@@ -18,11 +18,14 @@
 # from a changable state and county + made slight changes to global variables
 # 7-14-26 GB. Added user-made module, created introduction to program
 # 7-15-26 GB. Added user-input funtions and printed results
+# 7-18-26 GB. Edited demo function and formatted printed dictionaries
+
 
 
 #non-standard modules needed for this 
 import census
 import us
+import pprint  # for printing info nicely
 #user made modules
 import extras
 #specific aspects needed from modules
@@ -94,6 +97,9 @@ NumHouseGovBen = DictData['B09010_002E']  # B09010_002E table
 DemoDict = {} # dictionary for holding data user wants to compare
 CompareList = [] # list of dictionaries for if comparing multiple zipcodes
 
+# prints data in nice format
+PrintStuff = pprint.PrettyPrinter(indent=2, width=35)
+
 ########################### 
 # USER-DEFINED FUNCTIONS
 ###########################
@@ -152,9 +158,10 @@ def AskDemoInfo():
     print('internet\n\tI. The number of people who live in', end=' ')
     print('their own homes\n\tJ. The number of people over', end=' ')
     print('over 25 who never finished 9th grade')
-    Again = True  # create variable to control loop
-    while Again == True:  # start ask loop
-        try:
+    DemoLoop = True  # create variable to control loop
+    while DemoLoop == True:  # start ask loop
+        InputLoop = True  # create variable for inner loop
+        while InputLoop == True:  # start loop
             global NumDisabledPop  # global variable for disability option
             global NumHouseGovBen  # global variable for benefits option
             global NumNinthGradeEd  # global variable for education option
@@ -174,43 +181,47 @@ def AskDemoInfo():
             UserInput = str.strip(UserInput)  # strips whitespace
             if UserInput == 'a':  # assigns data based on user input
                 DemoDict['Median Income'] = [MedianHouseIncome]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'b':
                 DemoDict['Below Poverty Line'] = [NumPopBelowPov]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'c':
                 DemoDict['Unemployed'] = [NumUnemployed]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'd':
                 DemoDict['Disabled Population'] = [NumDisabledPop]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'e':
                 DemoDict['No Healthcare'] = [NumWithoutHealthcare]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'f':
                 DemoDict['No Vehicle'] = [NumPopNoCar]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'g':
                 DemoDict['On Benefits'] = [NumHouseGovBen]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'h':
                 DemoDict['Has Digital Access'] = [NumHouseWTech]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'i':
                 DemoDict['Owns a Home'] = [NumHouseOwners]
-                Again == False  # ends loop
+                break  # ends loop
             elif UserInput == 'j':
                 DemoDict['Unfinished Ninth Grade'] = [NumNinthGradeEd]
-                Again == False  # ends loop
-            else:  # checks for quit input
-                UserInput == 'q'
+                break  # ends loop
+            elif UserInput == 'q':
                 extras.goodbye()  # calls goodbye message
                 break  # breaks loop
-        except:  # checks for input errors
-            print('Sorry, that answer is invalid. Please try again.')
-            continue  # continues loop until correct answer
+            else:  # checks for input errors
+                print('Sorry, that answer is invalid. Please try again.')
+        if UserInput == 'q':  # checks for quit prompt and breaks
+            break
+        extras.goAgain()  # asks about adding more data
+        if extras.Again == True:  # checks that user wants to keep going
+            InputLoop = True  # if yes, inner loop starts again
+        else:  # breaks outer loop if answer is no
+            break
     CompareList.append(DemoDict)  # appends data to list for later
-    extras.goAgain()  # asks about adding more data
             
 
 # the information the user wants is paired with its census variable 
@@ -256,16 +267,15 @@ while mainLoop == True:  # start while loop for main program
         FileCheck = str.strip(FileCheck)  # strips whitespace
         if FileCheck == 'y':
             # add function for saving to csv file -- Courtney
-        elif FileCheck == 'n': 
-            print(CompareList)
+        elif FileCheck == 'n': # prints list of dictionaries for user to see
+            PrintStuff.pprint(CompareList)
         elif FileCheck == 'q':  # check for quit
             extras.goodbye()
             break
         else:  # check for errors
             print('Sorry, that is not a valid answer. Please try again.')
-    elif ReadyResults == 'n':  
-        print(CompareList)  # prints list of dictionaries for user to see
-        mainLoop = False
+    elif ReadyResults == 'n':   # prints list of dictionaries for user to see
+        PrintStuff.pprint(CompareList) 
     elif ReadyResults == 'q':  # checks for quit
         extras.goodbye()
         break
