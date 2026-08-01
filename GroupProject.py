@@ -8,7 +8,7 @@
 @Assignment: [Group Project]
     
 @Python Version: 3.8x   
-@Required Modules: [Census, Us, format]
+@Required Modules: [Census, Us, format, pprint, extras]
     
 @Description: [User can find census data for set socioeconomic info for state
                and county of their choice]
@@ -19,6 +19,7 @@
 # 7-14-26 GB. Added user-made module, created introduction to program
 # 7-15-26 GB. Added user-input funtions and printed results
 # 7-18-26 GB. Edited demo function and formatted printed dictionaries
+# 7-31-26 PA. Cleaned up some leftover comments + added to docstring
 
 
 
@@ -36,10 +37,6 @@ c = Census("3f2ba2143b0d33ef1ceec3c75c4090499c59c5a6")
 ########################### 
 # GLOBAL VARIABLES
 ###########################
-
-# i reorganzied the varaibles so they were seperated by ACS5DP and ACS5
-# also for some of them i reduced the ammount of variables we were pulling 
-# having found clearer data during testing (Poverty pop)
 
 # variable that allows user to chose which county based on fips code
 CountyFip = 163 #currently autoset for testing (wayne) 
@@ -223,12 +220,6 @@ def AskDemoInfo():
             break
     CompareList.append(DemoDict)  # appends data to list for later
             
-
-# the information the user wants is paired with its census variable 
-# nicly within the DataDP+Data dictionaries
-# i was unsure how you planned to go about your input/outputs so i didnt 
-# set up the variables in the nNinthGradeEd = DataDP['DP02_0072E'] manner
-# in case that was not your plan
 
 ##########################
 # SCRIPT HERE
