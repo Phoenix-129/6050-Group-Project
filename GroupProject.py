@@ -20,13 +20,15 @@
 # 7-15-26 GB. Added user-input funtions and printed results
 # 7-18-26 GB. Edited demo function and formatted printed dictionaries
 # 7-31-26 PA. Cleaned up some leftover comments + added to docstring
-
-
+# 8-2-26 CK. Added user-dx fx for downloading data as CSV file
+# 8-3-26 CK. some bug fixes to make code work ---- still fixing
+# 8-5-26 PA. CK and KP did some bugs fixes which I verified and cleaned up
 
 #non-standard modules needed for this 
 import census
 import us
 import pprint  # for printing info nicely
+import csv
 #user made modules
 import extras
 #specific aspects needed from modules
@@ -107,7 +109,7 @@ def AskStateInfo():  # asks user for state fip codes
         try:
             global StateFip  # call variable for user input
             # asks for user's chosen state
-            StateFip = print('What state(s) are you looking at? ')
+            StateFip = input('What state FIPS code are you looking at? ')
             StateFip = str.strip(StateFip)  # strip whitespace
             StateFip = str.lower(StateFip)  # make lowercase for quit
             if StateFip == 'q':
@@ -116,7 +118,7 @@ def AskStateInfo():  # asks user for state fip codes
             else:
                 StateFip = int(StateFip)  # make integer
                 AskLoop = False  # end loop
-        except:  # checks for non-integer input
+        except ValueError:  # checks for non-integer input
             print('Sorry, your answer needs to be an integer.')
             continue  # repeats question
 
@@ -126,7 +128,7 @@ def AskCountyInfo():  # asks user for county fip codes
         try:
             global CountyFip   # call variable for user input
             # asks for user's chosen county
-            CountyFip = print('What county/counties are you looking at? ')
+            CountyFip = input('What county FIPS code are you looking at? ')
             CountyFip = str.strip(CountyFip)  # strip whitespace
             CountyFip = str.lower(CountyFip)  # makes lowercase for quit
             if CountyFip == 'q':
@@ -135,14 +137,57 @@ def AskCountyInfo():  # asks user for county fip codes
             else:
                 CountyFip = int(CountyFip)  # make integer
                 AskLoop2 = False  # end loop
-        except:  # checks for non-integer input
+        except ValueError:  # checks for non-integer input
             print('Sorry, your answer needs to be an integer.')
             continue  # repeats question
 
+def LoadCountyData():
+    global DataDP, Data
+    global DictDataDP, DictData
+    global NumNinthGradeEd
+    global NumDisabledPop
+    global NumHouseWTech
+    global NumUnemployed
+    global NumWithoutHealthcare
+    global NumPopNoCar
+    global MedianHouseIncome
+    global NumPopBelowPov
+    global NumHouseOwners
+    global NumHouseGovBen
+
+    try:
+        DataDP = c.acs5dp.state_county(FieldDP, StateFip, CountyFip)
+        Data = c.acs5.state_county(Field, StateFip, CountyFip)
+
+        DictDataDP = DataDP[0]
+        DictData = Data[0]
+
+    except IndexError:
+        print("Invalid state or county FIPS code. Please try again.")
+        return False
+
+    NumNinthGradeEd = DictDataDP['DP02_0060E']
+    NumDisabledPop = DictDataDP['DP02_0072E']
+    NumHouseWTech = [
+        DictDataDP['DP02_0153E'],
+        DictDataDP['DP02_0154E']
+    ]
+    NumUnemployed = DictDataDP['DP03_0109E']
+    NumWithoutHealthcare = DictDataDP['DP03_0099E']
+    NumPopNoCar = DictDataDP['DP04_0058E']
+
+    MedianHouseIncome = DictData['B10010_001E']
+    NumPopBelowPov = DictData['B16009_002E']
+    NumHouseOwners = DictData['B25011_002E']
+    NumHouseGovBen = DictData['B09010_002E']
+
+    return True
+  
 # add function here for asking for what kind of info they want
+
 def AskDemoInfo():
     # create menu of options
-    print('You can choose up 5 of the following ten choices', end=' ')
+    print('You may chose any amount of the following choices', end=' ')
     print('your data. They are:\n\tA. The median household', end=' ')
     print('income\n\tB. The number of the population below', end=' ')
     print('the poverty line\n\tC. The number of people who', end=' ')
@@ -218,9 +263,24 @@ def AskDemoInfo():
             InputLoop = True  # if yes, inner loop starts again
         else:  # breaks outer loop if answer is no
             break
-    CompareList.append(DemoDict)  # appends data to list for later
-            
+    CompareList.append(DemoDict.copy())  # appends data to list for later
 
+    # asks user for file name and saves as csv
+def SaveResults(CompareList):
+    if not CompareList:
+        print("No data to save.")
+        return
+
+    FileName = input("What would you like to name the file? ").strip()
+    FileName += ".csv"
+
+    with open(FileName, "w", newline="") as csvFile:
+        fieldnames = CompareList[0].keys()
+        writer = csv.DictWriter(csvFile, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(CompareList)
+
+    print(f"\nYour results have been saved to {FileName}.")
 ##########################
 # SCRIPT HERE
 ##########################
@@ -235,17 +295,24 @@ extras.lineBreak()  # calls linebreak for spacing
 
 mainLoop = True  # variable for while loop
 
-while mainLoop == True:  # start while loop for main program
-    print("First, let's choose a state and county.")  # intros next step
-    AskStateInfo()  # calls function for asking for state fip codes
-    if StateFip == 'q':  # breaks loop if user input is quit
+while mainLoop == True:
+    print("First, let's choose a state and county.")
+    AskStateInfo()
+    if StateFip == 'q':
         break
-    AskCountyInfo()  # calls function for asking for county fip codes
-    if CountyFip == 'q':  # breaks loop if user input is quit
+
+    AskCountyInfo()
+    if CountyFip == 'q':
         break
-    AskDemoInfo()  # calls function for asking for demographic data
-    if UserInput == 'q':  # breaks loop if user input is quit
+
+    if not LoadCountyData():
+        continue
+
+    AskDemoInfo()
+
+    if UserInput == 'q':
         break
+        
     # asks if user wants to see results or add more data
     print('Are you ready for your results or would you like to', end=' ')
     print('compare them to another county?\n')
@@ -257,7 +324,7 @@ while mainLoop == True:  # start while loop for main program
         FileCheck = str.lower(FileCheck)  # makes lowercase
         FileCheck = str.strip(FileCheck)  # strips whitespace
         if FileCheck == 'y':
-            # add function for saving to csv file -- Courtney
+            SaveResults(CompareList)  # function for saving to csv file 
         elif FileCheck == 'n': # prints list of dictionaries for user to see
             PrintStuff.pprint(CompareList)
         elif FileCheck == 'q':  # check for quit
@@ -273,13 +340,13 @@ while mainLoop == True:  # start while loop for main program
     else:  # error check
         print('Sorry, that is not a valid answer. Please try again.')
     extras.goAgain()  # checks if user wants to do a new search
-    if Again == True:  # new search is a go
-        DemoDict.clear()  # clears dictionary for new data
-        CompareList.clear()  # clears list for new data
-        continue
-    elif Again == False:
-        extras.goodbye()  # prints goodbye message
-        break  # breaks loop to end program
 
+    if extras.Again:
+        DemoDict.clear()
+        CompareList.clear()
+        continue
+    else:
+        extras.goodbye()
+        break
 
 

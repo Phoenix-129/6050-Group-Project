@@ -5,7 +5,7 @@ USER GUIDE - ZIP CODE DEMOGRAPHIC DATA EXPLORER
 Prepared by: Group 5 - Phoenix Andrews, Griffin Barkdoll, Wyatt Glammer, Courtney 
 Kawalkowski, Kristi Price
 Course: INF 6050
-Date: July 15, 2026
+Date: August 5, 2026
 
 ================================================================================
 1. OVERVIEW
@@ -18,7 +18,7 @@ designed for students, community organizations, grant writers, and researchers w
 need a quick, straightforward way to pull demographic information for specific FIP 
 codes without navigating the full Census website.
 
-Users can enter a FIP code for an area of Michigan and receive a summary of 
+Users can enter a FIP code for any state and county and receive a summary of 
 relevant demographic data, such as number of residents without healthcare, internet 
 access, number of residents below the federal poverty line, and median household 
 income. For a full list of available variables, see Section 6 of this User Guide.
@@ -38,21 +38,23 @@ you will only need to follow the prompts on screen.
 - Python 3.8x installed on your computer
   (Available to download at https://www.python.org/downloads if not already installed)
 - Required modules: [Census, Us, format]
-- Anything else???______
 
 ================================================================================
 4. RUNNING THE PROGRAM
 ================================================================================
-
-Step 1: Open the main program file _____insert file name____ in
-        Spyder, or run it from the command line using:
-       ________
+	PRIOR TO RUNNING
+Step 1: go to TOOLS->PYHTHONPATH
+Step 2: Click Add Path
+Step 3: Inside the "6050-Group-Project" is the "Modules" folder, select that as the location
+Step 4: Hit "OK" if it ask to clear cache or update let it.
+	RUNNING THE PROGRAM
+Step 1: Open the main program file in Spyder, or run it from the command line
 Step 2: When the program starts it will display a welcome message and instructions. 
-Follow the on-screen prompts to use the program (selecting state, county/fip code, 
-and demographic variables).
+	Follow the on-screen prompts to use the program (selecting state, county/fip code, 
+	and demographic variables).
 Step 3: After selection, you can choose to display results or compare to another county.
 Step 4: After you have finished selecting data, you can save the results to a CSV
-file 
+	file 
 Step 5: To exit the program at any time, just type "q" without the quotes and the program
 will exit.
 
@@ -60,10 +62,13 @@ will exit.
 5. INPUT REQUIREMENTS
 ================================================================================
 
-- FIP codes must be entered as 5-digit numbers (e.g., 48201).
-- Only zip codes within Michigan are supported in
-  this version of the program.
-- If invalid input is entered (e.g., letters, incomplete zip codes, or zip
+- FIP codes for State and County must be inputted in their entirety 
+	- 2 digits for state codes, 3 digits for county
+- If you need to check FIP codes check the fips2county.tsv file
+	- if when launching fips2count.tsv you get the message asking if you want 
+	the file converted to remove leading zeros select no, you need the leading 
+	zeros for the fips to work
+- If invalid input is entered (e.g., letters, incomplete FIP codes, or FIP
   codes outside the supported area), the program will display an error
   message and prompt you to try again rather than crashing.
 
@@ -89,19 +94,8 @@ The following variables can be accessed for demographic data at the county-level
 
 Demographic data used in this program is sourced from the U.S. Census Bureau
 and the American Community Survey (ACS).
-[Insert specific dataset names/years/links once finalized, e.g., "2020
-Decennial Census" or "2018-2022 ACS 5-Year Estimates."]
 
 This program is intended for educational and informational purposes.
-
-================================================================================
-8. PROJECT TEAM & CONTACT
-================================================================================
-
-Team Members: Phoenix Andrews, Griffin Barkdoll, Wyatt Glammer, Courtney Kawalkowski, 
-Kristina Price
-
-For questions about this program, please contact: 
 
 ================================================================================
 END OF USER GUIDE
