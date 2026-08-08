@@ -37,7 +37,7 @@ you will only need to follow the prompts on screen.
 
 - Python 3.8x installed on your computer
   (Available to download at https://www.python.org/downloads if not already installed)
-- Required modules: [Census, Us, format]
+- Required modules: [Census, Us, extras]
 
 ================================================================================
 4. RUNNING THE PROGRAM
