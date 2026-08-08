@@ -116,7 +116,6 @@ def AskStateInfo():  # asks user for state fip codes
                 extras.goodbye()  # calls goodbye function
                 break
             else:
-                StateFip = int(StateFip)  # make integer
                 AskLoop = False  # end loop
         except ValueError:  # checks for non-integer input
             print('Sorry, your answer needs to be an integer.')
@@ -135,7 +134,6 @@ def AskCountyInfo():  # asks user for county fip codes
                 extras.goodbye()  # calls goodbye function
                 break 
             else:
-                CountyFip = int(CountyFip)  # make integer
                 AskLoop2 = False  # end loop
         except ValueError:  # checks for non-integer input
             print('Sorry, your answer needs to be an integer.')
